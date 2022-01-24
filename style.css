@@ -1,0 +1,12 @@
+.aprovat{
+    color: #388e3c;
+    font-weight: bold;
+}
+.suspes{
+    color: #d32f2f;
+    font-weight: bold;
+}
+.suficient{
+    color: #fdd835;
+    font-weight: bold;
+}
