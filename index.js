@@ -5,7 +5,7 @@ function main() {
     const reducer = (state = [], action) => {
         console.log("reducer", state, action);
         if (action.type === "ADD_USER") {
-            return [...state, [action.nom, action.curs, action.modul, action.nota]];
+            return [...state, [action.nom, action.curs, action.nota]];
         };
         return state;
     };
@@ -26,15 +26,20 @@ function main() {
     const userInput = document.getElementById('userInput');
 
     store.subscribe(() => {
-        taula.innerHTML = '<thead> <tr> <th scope="col">Nom</th> <th scope="col">Curs</th> <th scope="col">Modul</th> <th scope="col">Nota</th> </tr> </thead><tbody>';
+        taula.innerHTML = '<thead> <tr> <th scope="col">ID</th> <th scope="col">Nom</th> <th scope="col">Curs</th> <th scope="col">Mitjana</th> </tr> </thead>';
         userInput.value = '';
 
+        let index = 1;
         store.getState().forEach(user => {
+
             let fila = document.createElement('tr');
+            let id = document.createElement('td');
+            id.textContent = index;
+            fila.appendChild(id);
             for (let i in user) {
                 let cela = document.createElement('td');
                 cela.textContent = user[i];
-                if (i == 3) {
+                if (i == 2) {
                     if (user[i] < 5) {
                         cela.classList = 'suspes';
                     } else if (user[i] == 5) {
@@ -45,7 +50,7 @@ function main() {
                 }
                 fila.appendChild(cela);
             }
-            //taula.innerHTML += `< td > ${ user[0] }</ ><td>${user[1]}</td><td>${user[2]}</td><td>${user[3]}</td>`;
+            index++;
             taula.appendChild(fila);
         });
         taula.innerHTML += '</tbody>'
@@ -54,6 +59,8 @@ function main() {
 
 
     addUserBtn.addEventListener('click', () => {
-        store.dispatch({ type: "ADD_USER", nom: userInput.value, curs: "DAW2", modul: "M06", nota: Math.floor(Math.random() * 11) });
+        store.dispatch({
+            type: "ADD_USER", nom: userInput.value, curs: "DAW2", nota: Math.floor(Math.random() * 11)
+        });
     })
 }
