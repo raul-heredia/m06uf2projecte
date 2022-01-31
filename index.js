@@ -98,7 +98,7 @@ function main() {
         });
     });
     addUserBtn.addEventListener('click', () => {
-        if (!isNaN(parseInt(idInput.value)) || userInput.value !== "" || cursInput.value !== "" || !isNaN(parseInt(notaInput.value))) {
+        if (idInput.value !== "" || userInput.value !== "" || cursInput.value !== "" || notaInput.value !== "") {
             let objectPos = store.getState().map((x) => { return x.id; }).indexOf(parseInt(idInput.value));
             if (objectPos === -1) {
                 store.dispatch({
@@ -122,5 +122,5 @@ function main() {
         store.dispatch({
             type: "DELETE_USER", id: parseInt(idInput.value)
         });
-    })
+    });
 }
