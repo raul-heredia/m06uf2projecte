@@ -17,6 +17,8 @@
 
 <body>
     <div class="input-group mb-3">
+        <input type="text" id="idInput" class="form-control" placeholder="Identificador d'Usuari"
+            aria-label="Identificador d'Usuari">
         <input type="text" id="userInput" class="form-control" placeholder="Nom d'Usuari" aria-label="Nom d'Usuari">
         <div class="input-group-append">
             <button id="addUser" class="btn btn-primary" type="button" id="button-addon2">Afegir
@@ -24,7 +26,14 @@
         </div>
     </div>
     <table class="table table-hover" id="taula">
-
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Curs</th>
+                <th scope="col">Mitjana</th>
+            </tr>
+        </thead>
     </table>
 
     <!-- Bootstrap -->

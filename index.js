@@ -5,62 +5,63 @@ function main() {
     const reducer = (state = [], action) => {
         console.log("reducer", state, action);
         if (action.type === "ADD_USER") {
-            return [...state, [action.nom, action.curs, action.nota]];
+            return [...state, { id: action.id, nom: action.nom, curs: action.curs, nota: action.nota }];
         };
         return state;
     };
     const store = Redux.createStore(reducer);
-
-    // modulo 1
-    // store.subscribe(() => {
-    //     console.log("Subscribe modulo 1: ", store.getState());
-    // });
-
-    // modulo 2
-    // store.dispatch({ type: "ADD_USER", username: "jack" });
-    // store.dispatch({ type: "ADD_USER", username: "john" });
-
-
     const taula = document.getElementById('taula');
-    const addUserBtn = document.getElementById('addUser');
+    const idInput = document.getElementById('idInput');
     const userInput = document.getElementById('userInput');
+    const addUserBtn = document.getElementById('addUser');
+
+
+    // FUNCIONS
+    function netejaCamps() {
+        idInput.value = '';
+        userInput.value = '';
+    }
+    function esborraTaula() {
+        while (taula.rows.length > 1) {
+            taula.deleteRow(1);
+        }
+    }
+    function generaTaula() {
+        netejaCamps()
+        esborraTaula()
+        store.getState().forEach(user => {
+            let fila = taula.insertRow(-1);
+            fila.insertCell(0).innerHTML = user.id;
+            fila.insertCell(1).innerHTML = user.nom;
+            fila.insertCell(2).innerHTML = user.curs;
+            let nota = fila.insertCell(3);
+            if (user.nota < 5) {
+                nota.className = 'suspes';
+            } else if (user.nota == 5) {
+                nota.className = 'suficient';
+            } else if (user.nota > 5) {
+                nota.className = 'aprovat';
+            }
+            nota.innerHTML = user.nota;
+        })
+    }
+
 
     store.subscribe(() => {
-        taula.innerHTML = '<thead> <tr> <th scope="col">ID</th> <th scope="col">Nom</th> <th scope="col">Curs</th> <th scope="col">Mitjana</th> </tr> </thead>';
-        userInput.value = '';
-
-        let index = 1;
-        store.getState().forEach(user => {
-
-            let fila = document.createElement('tr');
-            let id = document.createElement('td');
-            id.textContent = index;
-            fila.appendChild(id);
-            for (let i in user) {
-                let cela = document.createElement('td');
-                cela.textContent = user[i];
-                if (i == 2) {
-                    if (user[i] < 5) {
-                        cela.classList = 'suspes';
-                    } else if (user[i] == 5) {
-                        cela.classList = 'suficient';
-                    } else if (user[i] > 5) {
-                        cela.classList = 'aprovat';
-                    }
-                }
-                fila.appendChild(cela);
-            }
-            index++;
-            taula.appendChild(fila);
-        });
-        taula.innerHTML += '</tbody>'
-
+        generaTaula();
     });
 
 
     addUserBtn.addEventListener('click', () => {
-        store.dispatch({
-            type: "ADD_USER", nom: userInput.value, curs: "DAW2", nota: Math.floor(Math.random() * 11)
-        });
+        let elementPos = store.getState().map((x) => { return x.id; }).indexOf(idInput.value);
+        if (elementPos === -1) {
+            store.dispatch({
+                type: "ADD_USER", id: idInput.value, nom: userInput.value, curs: "DAW2", nota: Math.floor(Math.random() * 11)
+            });
+        } else {
+            netejaCamps()
+            alert("Error, ja existeix un alumne amb aquest identificador");
+        }
+
     })
 }
