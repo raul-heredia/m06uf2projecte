@@ -16,15 +16,24 @@
 </head>
 
 <body>
-    <div class="input-group mb-3">
-        <input type="text" id="idInput" class="form-control" placeholder="Identificador d'Usuari"
-            aria-label="Identificador d'Usuari">
-        <input type="text" id="userInput" class="form-control" placeholder="Nom d'Usuari" aria-label="Nom d'Usuari">
+    <div class="input-group mb-4">
+        <input type="text" id="idInput" class="form-control" placeholder="Identificador de l'Alumne"
+            aria-label="Identificador de l'Alumne">
+        <input type="text" id="userInput" class="form-control" placeholder="Nom de l'alumne"
+            aria-label="Nom de l'alumne">
+        <input type="text" id="cursInput" class="form-control" placeholder="Curs" aria-label="Curs">
+        <input type="text" id="notaInput" class="form-control" placeholder="Nota" aria-label="Nota">
+    </div>
+    <center>
         <div class="input-group-append">
             <button id="addUser" class="btn btn-primary" type="button" id="button-addon2">Afegir
             </button>
+            <button id="editUser" class="btn btn-primary" type="button" id="button-addon2">Modificar
+            </button>
+            <button id="removeUser" class="btn btn-primary" type="button" id="button-addon2">Eliminar
+            </button>
         </div>
-    </div>
+    </center>
     <table class="table table-hover" id="taula">
         <thead>
             <tr>
