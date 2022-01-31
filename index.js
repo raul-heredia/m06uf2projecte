@@ -24,11 +24,8 @@ function main() {
             }
         };
         if (action.type === 'DELETE_USER') {
-            console.log("Action delete", action.id);
             let objectPos = state.map((x) => { return x.id; }).indexOf(action.id);
-            console.log("objectPos", objectPos);
             if (objectPos !== -1) {
-                console.log("objectPos dintre if", objectPos);
                 state.splice(objectPos, 1);
             } else {
                 alert(`Error, no existeix cap alumne amb el identificador ${action.id}.`);
@@ -103,7 +100,6 @@ function main() {
     addUserBtn.addEventListener('click', () => {
         if (!isNaN(parseInt(idInput.value)) || userInput.value !== "" || cursInput.value !== "" || !isNaN(parseInt(notaInput.value))) {
             let objectPos = store.getState().map((x) => { return x.id; }).indexOf(parseInt(idInput.value));
-            console.log(objectPos);
             if (objectPos === -1) {
                 store.dispatch({
                     type: "ADD_USER", id: parseInt(idInput.value), nom: userInput.value, curs: cursInput.value, nota: parseInt(notaInput.value)
