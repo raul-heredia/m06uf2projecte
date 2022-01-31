@@ -3,11 +3,11 @@ window.onload = main;
 function main() {
 
     const reducer = (state = [], action) => {
-        console.log("reducer", state, action);
-        if (action.type === "ADD_USER") {
+        console.log('reducer', state, action);
+        if (action.type === 'ADD_USER') {
             return [...state, { id: action.id, nom: action.nom, curs: action.curs, nota: action.nota }];
         };
-        if (action.type === "MODIFY_USER") {
+        if (action.type === 'MODIFY_USER') {
             let objectPos = state.map((x) => { return x.id; }).indexOf(action.id);
             if (objectPos !== -1) {
                 if (action.nom != "") {
@@ -23,6 +23,12 @@ function main() {
                 alert(`Error, no existeix cap alumne amb el identificador ${idInput.value}.`);
             }
         };
+        if (action.type === 'DELETE_USER') {
+            let objectPos = state.map((x) => { return x.id; }).indexOf(action.id);
+            if (objectPos !== -1) state.splice(action.id, 1);
+        } else {
+            alert(`Error, no existeix cap alumne amb el identificador ${idInput.value}.`);
+        }
         return state;
     };
     const store = Redux.createStore(reducer);
@@ -94,6 +100,12 @@ function main() {
     editUserBtn.addEventListener('click', () => {
         store.dispatch({
             type: "MODIFY_USER", id: idInput.value, nom: userInput.value, curs: cursInput.value, nota: notaInput.value
+        });
+        netejaCamps();
+    })
+    removeUserBtn.addEventListener('click', () => {
+        store.dispatch({
+            type: "DELETE_USER", id: idInput.value
         });
         netejaCamps();
     })
