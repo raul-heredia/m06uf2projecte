@@ -20,14 +20,16 @@ function main() {
                     state[objectPos].nota = action.nota;
                 }
             } else {
-                alert(`Error, no existeix cap alumne amb el identificador ${idInput.value}.`);
+                alert(`Error, no existeix cap alumne amb el identificador ${action.id}.`);
             }
         };
         if (action.type === 'DELETE_USER') {
             let objectPos = state.map((x) => { return x.id; }).indexOf(action.id);
-            if (objectPos !== -1) state.splice(action.id, 1);
-        } else {
-            alert(`Error, no existeix cap alumne amb el identificador ${idInput.value}.`);
+            if (objectPos !== -1) {
+                state.splice(action.id, 1);
+            } else {
+                alert(`Error, no existeix cap alumne amb el identificador ${action.id}.`);
+            }
         }
         return state;
     };
@@ -42,6 +44,16 @@ function main() {
     const addUserBtn = document.getElementById('addUser');
     const editUserBtn = document.getElementById('editUser');
     const removeUserBtn = document.getElementById('removeUser');
+
+    // Afegim usuaris a l'inici mentre no tenim accés a indexeddb
+    const usuarisInicial = [
+        { id: 1, nom: "Sergi", curs: "DAW2", nota: 9 },
+        { id: 2, nom: "Ana", curs: "DAW2", nota: 10 },
+        { id: 3, nom: "Raúl", curs: "DAW2", nota: 10 },
+        { id: 4, nom: "Marc", curs: "DAM2", nota: 7 },
+        { id: 5, nom: "Paula", curs: "ASIX2", nota: 8 },
+    ];
+
 
 
     // FUNCIONS
@@ -76,11 +88,17 @@ function main() {
         })
     }
 
+    // STORE SUBSCRIBE DETECTA CANVIS EN EL ESTAT I EXECUTA EL CODI QUE HI HA DINS CADA COP QUE CANVIA
 
     store.subscribe(() => {
         generaTaula();
     });
 
+    usuarisInicial.forEach(user => {
+        store.dispatch({
+            type: "ADD_USER", id: user.id, nom: user.nom, curs: user.curs, nota: user.nota
+        });
+    });
 
     addUserBtn.addEventListener('click', () => {
         if (idInput.value !== "" || userInput.value !== "" || cursInput.value !== "" || notaInput.value !== "") {
