@@ -16,7 +16,7 @@ function main() {
                 if (action.curs != "") {
                     state[objectPos].curs = action.curs;
                 }
-                if (action.nota != "") {
+                if (!isNaN(action.nota)) {
                     state[objectPos].nota = action.nota;
                 }
             } else {
@@ -24,9 +24,12 @@ function main() {
             }
         };
         if (action.type === 'DELETE_USER') {
+            console.log("Action delete", action.id);
             let objectPos = state.map((x) => { return x.id; }).indexOf(action.id);
+            console.log("objectPos", objectPos);
             if (objectPos !== -1) {
-                state.splice(action.id, 1);
+                console.log("objectPos dintre if", objectPos);
+                state.splice(objectPos, 1);
             } else {
                 alert(`Error, no existeix cap alumne amb el identificador ${action.id}.`);
             }
@@ -53,8 +56,6 @@ function main() {
         { id: 4, nom: "Marc", curs: "DAM2", nota: 7 },
         { id: 5, nom: "Paula", curs: "ASIX2", nota: 8 },
     ];
-
-
 
     // FUNCIONS
     function netejaCamps() {
@@ -94,18 +95,18 @@ function main() {
         generaTaula();
     });
 
-    usuarisInicial.forEach(user => {
+    usuarisInicial.forEach(usuariInicial => {
         store.dispatch({
-            type: "ADD_USER", id: user.id, nom: user.nom, curs: user.curs, nota: user.nota
+            type: "ADD_USER", id: usuariInicial.id, nom: usuariInicial.nom, curs: usuariInicial.curs, nota: usuariInicial.nota
         });
     });
-
     addUserBtn.addEventListener('click', () => {
-        if (idInput.value !== "" || userInput.value !== "" || cursInput.value !== "" || notaInput.value !== "") {
-            let objectPos = store.getState().map((x) => { return x.id; }).indexOf(idInput.value);
+        if (!isNaN(parseInt(idInput.value)) || userInput.value !== "" || cursInput.value !== "" || !isNaN(parseInt(notaInput.value))) {
+            let objectPos = store.getState().map((x) => { return x.id; }).indexOf(parseInt(idInput.value));
+            console.log(objectPos);
             if (objectPos === -1) {
                 store.dispatch({
-                    type: "ADD_USER", id: idInput.value, nom: userInput.value, curs: cursInput.value, nota: notaInput.value
+                    type: "ADD_USER", id: parseInt(idInput.value), nom: userInput.value, curs: cursInput.value, nota: parseInt(notaInput.value)
                 });
             } else {
                 alert(`Error, ja existeix un alumne amb el identificador ${idInput.value}.`);
@@ -117,14 +118,13 @@ function main() {
     });
     editUserBtn.addEventListener('click', () => {
         store.dispatch({
-            type: "MODIFY_USER", id: idInput.value, nom: userInput.value, curs: cursInput.value, nota: notaInput.value
+            type: "MODIFY_USER", id: parseInt(idInput.value), nom: userInput.value, curs: cursInput.value, nota: parseInt(notaInput.value)
         });
         netejaCamps();
     })
     removeUserBtn.addEventListener('click', () => {
         store.dispatch({
-            type: "DELETE_USER", id: idInput.value
+            type: "DELETE_USER", id: parseInt(idInput.value)
         });
-        netejaCamps();
     })
 }
