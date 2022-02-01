@@ -21,3 +21,8 @@ table{
 button{
     margin-left: 15px ;
 }
+
+i.bi-x-lg:hover{
+    color: red;
+    cursor: pointer;
+}
