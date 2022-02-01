@@ -1,7 +1,6 @@
 window.onload = main;
 
 function main() {
-
     const reducer = (state = [], action) => {
         console.log('reducer', state, action);
         if (action.type === 'ADD_USER') {
@@ -43,16 +42,56 @@ function main() {
     // Botons
     const addUserBtn = document.getElementById('addUser');
     const editUserBtn = document.getElementById('editUser');
-    const removeUserBtn = document.getElementById('removeUser');
 
-    // Afegim usuaris a l'inici mentre no tenim accés a indexeddb
-    const usuarisInicial = [
-        { id: 1, nom: "Sergi", curs: "DAW2", nota: 9 },
-        { id: 2, nom: "Ana", curs: "DAW2", nota: 10 },
-        { id: 3, nom: "Raúl", curs: "DAW2", nota: 10 },
-        { id: 4, nom: "Marc", curs: "DAM2", nota: 7 },
-        { id: 5, nom: "Paula", curs: "ASIX2", nota: 8 },
-    ];
+    const DB_VERSION = 19;
+    window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+    window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction || {
+        READ_WRITE: "readwrite"
+    };
+    window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+
+    //la petició d'obertura no crea la DB, retorna de manera asíncrona un IDBOpenDBRequest, amb un objecte exit o error.
+    var peticioObertura = window.indexedDB.open("DAW2", DB_VERSION);
+    var db;
+
+    var emmagatzematge = {
+        desar: function (id, nom, curs, nota) {
+            let magatzemObjsAlumnes = db.transaction("alumnes", "readwrite").objectStore("alumnes");
+            let alumne = {
+                'id': parseInt(id), 'nom': nom, 'curs': curs, 'nota': parseInt(nota)
+            };
+            magatzemObjsAlumnes.add(alumne);
+        },
+        esborrarAlumne: function (id) {
+            magatzemObjsAlumnes = db.transaction("alumnes", "readwrite").objectStore("alumnes");
+            magatzemObjsAlumnes.delete(parseInt(id));
+        }
+    }
+    peticioObertura.onerror = function (event) {
+        alert("Problema!");
+    };
+    peticioObertura.onsuccess = function (event) {
+        db = event.target.result;
+    };
+
+    peticioObertura.onupgradeneeded = function (event) {
+        var db = event.target.result;
+        try {
+            db.deleteObjectStore("alumnes");
+        }
+        catch (e) {
+
+        }
+
+        //  magatzem amb autoIncrement com a key generator per a les notes dels alumnes
+        var magatzemObjsAlumnes = db.createObjectStore("alumnes", {
+            keyPath: "id"
+        });
+    };
+
+
+
+
 
     // FUNCIONS
     function netejaCamps() {
@@ -83,6 +122,10 @@ function main() {
                 nota.className = 'aprovat';
             }
             nota.innerHTML = user.nota;
+            let esborrar = fila.insertCell(4);
+            esborrar.innerHTML = '<i class="bi bi-x-lg"></i>';
+            esborrar.className = "esborrar";
+            esborrar.setAttribute('id', user.id);
         })
     }
 
@@ -91,16 +134,11 @@ function main() {
     store.subscribe(() => {
         generaTaula();
     });
-
-    usuarisInicial.forEach(usuariInicial => {
-        store.dispatch({
-            type: "ADD_USER", id: usuariInicial.id, nom: usuariInicial.nom, curs: usuariInicial.curs, nota: usuariInicial.nota
-        });
-    });
     addUserBtn.addEventListener('click', () => {
         if (idInput.value !== "" || userInput.value !== "" || cursInput.value !== "" || notaInput.value !== "") {
             let objectPos = store.getState().map((x) => { return x.id; }).indexOf(parseInt(idInput.value));
             if (objectPos === -1) {
+                emmagatzematge.desar(idInput.value, userInput.value, cursInput.value, notaInput.value);
                 store.dispatch({
                     type: "ADD_USER", id: parseInt(idInput.value), nom: userInput.value, curs: cursInput.value, nota: parseInt(notaInput.value)
                 });
@@ -118,9 +156,15 @@ function main() {
         });
         netejaCamps();
     })
-    removeUserBtn.addEventListener('click', () => {
-        store.dispatch({
-            type: "DELETE_USER", id: parseInt(idInput.value)
-        });
+    taula.addEventListener('click', (event) => {
+        if (event.target.className == "esborrar" || event.target.parentNode.className == "esborrar") {
+            buttonClicked = event.target.id;
+            if (event.target.tagName == 'I' && event.target.parentNode.tagName == 'TD') {
+                buttonClicked = event.target.parentNode.id; // Nos aseguramos que clicando el icono no devuelva undefined diciendole que el value es el valor del parentNode (El valor de cada botón)
+            }
+            store.dispatch({
+                type: "DELETE_USER", id: parseInt(buttonClicked)
+            });
+        }
     });
 }
