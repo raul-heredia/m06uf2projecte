@@ -213,4 +213,5 @@ function main() {
             emmagatzematge.esborrarAlumne(buttonClicked)
         }
     });
+    foo
 }
