@@ -63,7 +63,7 @@ function main() {
             magatzemObjsAlumnes.add(alumne);
         },
         esborrarAlumne: function (id) {
-            magatzemObjsAlumnes = db.transaction("alumnes", "readwrite").objectStore("alumnes");
+            let magatzemObjsAlumnes = db.transaction("alumnes", "readwrite").objectStore("alumnes");
             magatzemObjsAlumnes.delete(parseInt(id));
         }
     }
@@ -72,6 +72,17 @@ function main() {
     };
     peticioObertura.onsuccess = function (event) {
         db = event.target.result;
+        let magatzemObjsAlumnes = db.transaction("alumnes", "readwrite").objectStore("alumnes");
+        magatzemObjsAlumnes.openCursor().onsuccess = (event) => {
+            let cursor = event.target.result;
+            if (cursor) {
+                //console.log(cursor.key + " es " + cursor.value.nom);
+                store.dispatch({
+                    type: "ADD_USER", id: parseInt(cursor.key), nom: cursor.value.nom, curs: cursor.value.curs, nota: parseInt(cursor.value.nota)
+                });
+                cursor.continue();
+            }
+        };
     };
 
     peticioObertura.onupgradeneeded = function (event) {
@@ -165,6 +176,7 @@ function main() {
             store.dispatch({
                 type: "DELETE_USER", id: parseInt(buttonClicked)
             });
+            emmagatzematge.esborrarAlumne(buttonClicked)
         }
     });
 }
