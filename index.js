@@ -100,11 +100,19 @@ function main() {
         });
     };
 
-
-
-
-
     // FUNCIONS
+    function afegirUsuari(id, nom, curs, nota) {
+        let objectPos = store.getState().map((x) => { return x.id; }).indexOf(parseInt(id));
+        if (objectPos === -1) {
+            emmagatzematge.desar(parseInt(id), nom, curs, parseInt(nota));
+            store.dispatch({
+                type: "ADD_USER", id: parseInt(id), nom: nom, curs: curs, nota: parseInt(nota)
+            });
+        } else {
+            alert(`Error, ja existeix un alumne amb el identificador ${idInput.value}.`);
+            netejaCamps()
+        };
+    }
     function netejaCamps() {
         idInput.value = '';
         userInput.value = '';
@@ -140,23 +148,49 @@ function main() {
         })
     }
 
+    function dropJSON(targetEl, callback) {
+        // disable default drag & drop functionality
+        targetEl.addEventListener('dragenter', function (e) { e.preventDefault(); });
+        targetEl.addEventListener('dragover', function (e) { e.preventDefault(); });
+
+        targetEl.addEventListener('drop', function (event) {
+
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                var data = JSON.parse(this.result);
+                callback(data);
+            };
+
+            reader.readAsText(event.dataTransfer.files[0]);
+            event.preventDefault();
+        });
+    }
+
+    dropJSON(
+        document.getElementById("dropTarget"),
+        function (data) {
+            // dropped - do something with data
+            for (let i in data) {
+                afegirUsuari(data[i].id, data[i].nom, data[i].curs, data[i].nota)
+                //console.log("for", data[i].nom);
+            }
+        }
+    );
+
     // STORE SUBSCRIBE DETECTA CANVIS EN EL ESTAT I EXECUTA EL CODI QUE HI HA DINS CADA COP QUE CANVIA
 
     store.subscribe(() => {
         generaTaula();
     });
+
+
+    // LISTENERS
+
+
+
     addUserBtn.addEventListener('click', () => {
         if (idInput.value !== "" || userInput.value !== "" || cursInput.value !== "" || notaInput.value !== "") {
-            let objectPos = store.getState().map((x) => { return x.id; }).indexOf(parseInt(idInput.value));
-            if (objectPos === -1) {
-                emmagatzematge.desar(idInput.value, userInput.value, cursInput.value, notaInput.value);
-                store.dispatch({
-                    type: "ADD_USER", id: parseInt(idInput.value), nom: userInput.value, curs: cursInput.value, nota: parseInt(notaInput.value)
-                });
-            } else {
-                alert(`Error, ja existeix un alumne amb el identificador ${idInput.value}.`);
-                netejaCamps()
-            };
+            afegirUsuari(idInput.value, userInput.value, cursInput.value, notaInput.value)
         } else {
             alert("Error, falten camps per omplir.");
         };
