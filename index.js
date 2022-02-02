@@ -4,7 +4,7 @@ function main() {
     const reducer = (state = [], action) => {
         console.log('reducer', state, action);
         if (action.type === 'ADD_USER') {
-            return [...state, { id: action.id, nom: action.nom, curs: action.curs, nota: action.nota }];
+            return [...state, { id: action.id, nom: action.nom, curs: action.curs, nota: action.nota }].sort((a, b) => { return a.id - b.id });
         };
         if (action.type === 'MODIFY_USER') {
             let objectPos = state.map((x) => { return x.id; }).indexOf(action.id);
@@ -30,7 +30,7 @@ function main() {
                 alert(`Error, no existeix cap alumne amb el identificador ${action.id}.`);
             }
         }
-        return state;
+        return state.sort((a, b) => { return a.id - b.id });
     };
     const store = Redux.createStore(reducer);
     const taula = document.getElementById('taula');
