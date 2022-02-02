@@ -109,7 +109,7 @@ function main() {
                 type: "ADD_USER", id: parseInt(id), nom: nom, curs: curs, nota: parseInt(nota)
             });
         } else {
-            alert(`Error, ja existeix un alumne amb el identificador ${idInput.value}.`);
+            alert(`Error, ja existeix un alumne amb el identificador ${id}.`);
             netejaCamps()
         };
     }

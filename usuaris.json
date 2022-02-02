@@ -1,26 +1,68 @@
 [
     {
         "id": 100,
-        "nom": "Sergi",
-        "curs": "JSON",
-        "nota": 10
+        "nom": "Pere",
+        "curs": "JSON1",
+        "nota": 3
     },
     {
         "id": 101,
-        "nom": "Ana",
-        "curs": "JSON",
-        "nota": 10
+        "nom": "Pedro",
+        "curs": "JSON1",
+        "nota": 5
     },
     {
         "id": 102,
-        "nom": "Raúl",
-        "curs": "JSON",
-        "nota": 10
+        "nom": "Andreu",
+        "curs": "JSON2",
+        "nota": 7
     },
     {
         "id": 103,
-        "nom": "Joan",
-        "curs": "JSON",
-        "nota": 10
+        "nom": "Jordi",
+        "curs": "JSON2",
+        "nota": 9
+    },
+    {
+        "id": 104,
+        "nom": "Simon",
+        "curs": "JSON2",
+        "nota": 6
+    },
+    {
+        "id": 105,
+        "nom": "Ricard",
+        "curs": "JSON1",
+        "nota": 3
+    },
+    {
+        "id": 106,
+        "nom": "Johnny",
+        "curs": "JSON1",
+        "nota": 7
+    },
+    {
+        "id": 107,
+        "nom": "Daniel",
+        "curs": "JSON2",
+        "nota": 1
+    },
+    {
+        "id": 108,
+        "nom": "Jaume",
+        "curs": "JSON2",
+        "nota": 4
+    },
+    {
+        "id": 109,
+        "nom": "Caitlin",
+        "curs": "JSON2",
+        "nota": 2
+    },
+    {
+        "id": 110,
+        "nom": "Gonzalo",
+        "curs": "JSON1",
+        "nota": 8
     }
 ]
