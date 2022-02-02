@@ -33,6 +33,17 @@
             </button>
         </div>
     </center>
+    <h3>Filtres:</h3><br />
+    <div class="input-group mb-4">
+        <select id="selectMitjana" class="form-select" aria-label="Default select example">
+            <option selected disabled value="tots">Filtrar Per:</option>
+            <option value="aprovats">Aprovats</option>
+            <option value="suspesos">Suspesos</option>
+        </select>
+        <input type="text" id="filtrar" class="form-control" placeholder="Filtrar" aria-label="Filtrar">
+        <button id="resetFilter" class="btn btn-primary" type="button" id="button-addon2">Reset
+        </button>
+    </div>
     <table class="table table-hover" id="taula">
         <thead>
             <tr>

@@ -30,6 +30,21 @@ function main() {
                 alert(`Error, no existeix cap alumne amb el identificador ${action.id}.`);
             }
         }
+        if (action.type === 'FILTER_TEXT') {
+            const filtre = state.filter(alumne => alumne.nom.startsWith(action.filtrar));
+            return filtre;
+        }
+        if (action.type === 'FILTER_NOTA') {
+            if (action.filter === 'aprovats') {
+                let filterAprovats = state.filter(alumne => alumne.nota >= 5);
+                return filterAprovats;
+            } else if (action.filter === 'suspesos') {
+                let filterSuspesos = state.filter(alumne => alumne.nota < 5);
+                return filterSuspesos;
+            } else if (action.filter === 'tots') {
+                return state;
+            };
+        }
         return state.sort((a, b) => { return a.id - b.id });
     };
     const store = Redux.createStore(reducer);
@@ -43,6 +58,11 @@ function main() {
     const addUserBtn = document.getElementById('addUser');
     const editUserBtn = document.getElementById('editUser');
 
+    // FILTER:
+    let resetFilter = document.getElementById('resetFilter')
+    let selectMitjana = document.getElementById('selectMitjana');
+    let inputFiltrar = document.getElementById('filtrar');
+    let mitjana = "tots";
     const DB_VERSION = 19;
     window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
     window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction || {
@@ -186,8 +206,6 @@ function main() {
 
     // LISTENERS
 
-
-
     addUserBtn.addEventListener('click', () => {
         if (idInput.value !== "" || userInput.value !== "" || cursInput.value !== "" || notaInput.value !== "") {
             afegirUsuari(idInput.value, userInput.value, cursInput.value, notaInput.value)
@@ -212,5 +230,19 @@ function main() {
             });
             emmagatzematge.esborrarAlumne(buttonClicked)
         }
+    });
+    inputFiltrar.addEventListener('keydown', () => {
+        store.dispatch({
+            type: "FILTER_TEXT", filter: inputFiltrar.value,
+        })
+    })
+    selectMitjana.addEventListener('change', (event) => {
+        mitjana = event.target.value;
+        store.dispatch({
+            type: "FILTER_NOTA", filter: mitjana,
+        })
+    });
+    resetFilter.addEventListener('click', () => {
+        selectMitjana.getElementsByTagName('option')[0].selected = 'selected'
     });
 }
