@@ -242,10 +242,9 @@ function main() {
             Emmagatzematge.esborrarAlumne(buttonClicked)
         }
     });
-    inputFiltrar.addEventListener('keydown', () => {
-        store.dispatch({
-            type: "FILTER_TEXT", filter: inputFiltrar.value,
-        })
+    inputFiltrar.addEventListener('keyup', () => {
+        let filterText = store.getState().filter((a) => a.nom.toLowerCase().startsWith(inputFiltrar.value.toLowerCase()) || a.curs.toLowerCase().startsWith(inputFiltrar.value.toLowerCase()))
+        generaTaulaFiltre(filterText);
     })
     selectMitjana.addEventListener('change', (event) => {
         mitjana = event.target.value;
@@ -258,7 +257,7 @@ function main() {
                 filtre = store.getState().filter((a) => a.nota < 5)
                 break;
         }
-        generaTaulaFiltre(filtre)
+        generaTaulaFiltre(filtre);
     });
     resetFilter.addEventListener('click', () => {
         selectMitjana.getElementsByTagName('option')[0].selected = 'selected'
