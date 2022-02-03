@@ -75,6 +75,16 @@ function main() {
             magatzemObjsAlumnes.delete(parseInt(id));
         }
     }
+
+    class WebStorageEmmagatzematge extends Emmagatzematge {
+        static desar(id, nom) {
+            localStorage.setItem(parseInt(id), nom);
+        }
+        static esborrarAlumne(id) {
+            localStorage.removeItem(parseInt(id));
+        }
+    }
+
     peticioObertura.onerror = function (event) {
         alert("Problema!");
     };
@@ -88,9 +98,20 @@ function main() {
                 store.dispatch({
                     type: "ADD_USER", id: parseInt(cursor.key), nom: cursor.value.nom, curs: cursor.value.curs, nota: parseInt(cursor.value.nota)
                 });
+                WebStorageEmmagatzematge.desar(parseInt(cursor.key), cursor.value.nom)
                 cursor.continue();
             }
         };
+        let valor = 1, b;
+        if (valor == 1) {
+            b = 'return x + y + z ';
+        } else {
+            b = 'return x*y*z';
+        }
+        let funcDinamica = new Function('x', 'y', 'z', b)
+        for (let key = 0; key < localStorage.length; key++) {
+            console.log("Dades Local Storage, ID:", funcDinamica(localStorage.key(key), ", nom: ", localStorage.getItem(localStorage.key(key))))
+        }
     };
 
     peticioObertura.onupgradeneeded = function (event) {
@@ -113,6 +134,7 @@ function main() {
         let objectPos = store.getState().map((x) => { return x.id; }).indexOf(parseInt(id));
         if (objectPos === -1) {
             Emmagatzematge.desar(parseInt(id), nom, curs, parseInt(nota));
+            WebStorageEmmagatzematge.desar(parseInt(id), nom);
             store.dispatch({
                 type: "ADD_USER", id: parseInt(id), nom: nom, curs: curs, nota: parseInt(nota)
             });
@@ -200,7 +222,6 @@ function main() {
     dropJSON(
         document.getElementById("dropTarget"),
         function (data) {
-            // dropped - do something with data
             for (let i in data) {
                 afegirUsuari(data[i].id, data[i].nom, data[i].curs, data[i].nota)
                 //console.log("for", data[i].nom);
@@ -240,6 +261,7 @@ function main() {
                 type: "DELETE_USER", id: parseInt(buttonClicked)
             });
             Emmagatzematge.esborrarAlumne(buttonClicked)
+            WebStorageEmmagatzematge.esborrarAlumne(parseInt(buttonClicked));
         }
     });
     inputFiltrar.addEventListener('keyup', () => {
