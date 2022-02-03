@@ -17,45 +17,52 @@
 </head>
 
 <body id="dropTarget">
-    <div class="input-group mb-4">
-        <input type="text" id="idInput" class="form-control" placeholder="Identificador de l'Alumne"
-            aria-label="Identificador de l'Alumne">
-        <input type="text" id="userInput" class="form-control" placeholder="Nom de l'alumne"
-            aria-label="Nom de l'alumne">
-        <input type="text" id="cursInput" class="form-control" placeholder="Curs" aria-label="Curs">
-        <input type="text" id="notaInput" class="form-control" placeholder="Nota" aria-label="Nota">
-    </div>
-    <center>
-        <div class="input-group-append">
-            <button id="addUser" class="btn btn-primary" type="button" id="button-addon2">Afegir
-            </button>
-            <button id="editUser" class="btn btn-primary" type="button" id="button-addon2">Modificar
+    <nav class="navbar-light" style="background-color: #000000;">
+        <a class=" navbar-brand" href="#">
+            <img src="images/redux.svg" width="60" height="60" alt="">
+        </a>
+    </nav>
+    <main>
+        <div class="input-group mb-4">
+            <input type="text" id="idInput" class="form-control" placeholder="Identificador de l'Alumne"
+                aria-label="Identificador de l'Alumne">
+            <input type="text" id="userInput" class="form-control" placeholder="Nom de l'alumne"
+                aria-label="Nom de l'alumne">
+            <input type="text" id="cursInput" class="form-control" placeholder="Curs" aria-label="Curs">
+            <input type="text" id="notaInput" class="form-control" placeholder="Nota" aria-label="Nota">
+        </div>
+        <center>
+            <div class="input-group-append">
+                <button id="addUser" class="btn btn-primary" type="button" id="button-addon2">Afegir
+                </button>
+                <button id="editUser" class="btn btn-primary" type="button" id="button-addon2">Modificar
+                </button>
+            </div>
+        </center>
+        <h3>Filtres:</h3><br />
+        <div class="input-group mb-4">
+            <select id="selectMitjana" class="form-select" aria-label="Default select example">
+                <option selected disabled value="tots">Filtrar Per:</option>
+                <option value="aprovats">Aprovats</option>
+                <option value="suspesos">Suspesos</option>
+            </select>
+            <input type="text" id="filtrar" class="form-control" placeholder="Filtrar" aria-label="Filtrar">
+            <button id="resetFilter" class="btn btn-primary" type="button" id="button-addon2">Reset
             </button>
         </div>
-    </center>
-    <h3>Filtres:</h3><br />
-    <div class="input-group mb-4">
-        <select id="selectMitjana" class="form-select" aria-label="Default select example">
-            <option selected disabled value="tots">Filtrar Per:</option>
-            <option value="aprovats">Aprovats</option>
-            <option value="suspesos">Suspesos</option>
-        </select>
-        <input type="text" id="filtrar" class="form-control" placeholder="Filtrar" aria-label="Filtrar">
-        <button id="resetFilter" class="btn btn-primary" type="button" id="button-addon2">Reset
-        </button>
-    </div>
-    <table class="table table-hover" id="taula">
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Nom</th>
-                <th scope="col">Curs</th>
-                <th scope="col">Mitjana</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-    </table>
-    </div>
+        <table class="table table-hover" id="taula">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Curs</th>
+                    <th scope="col">Mitjana</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+        </table>
+        </div>
+    </main>
     <!-- Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

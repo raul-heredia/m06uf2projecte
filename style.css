@@ -1,7 +1,9 @@
-body{
+main{
     margin: 15px;
 }
-
+nav img{
+    padding: 10px;
+}
 table{
     margin-top: 10px;
 }
