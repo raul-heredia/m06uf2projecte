@@ -261,6 +261,7 @@ function main() {
     });
     resetFilter.addEventListener('click', () => {
         selectMitjana.getElementsByTagName('option')[0].selected = 'selected'
+        inputFiltrar.value = "";
         store.dispatch({
             type: "RESET_FILTER"
         });
