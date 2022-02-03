@@ -74,15 +74,15 @@ function main() {
     var peticioObertura = window.indexedDB.open("DAW2", DB_VERSION);
     var db;
 
-    var emmagatzematge = {
-        desar: function (id, nom, curs, nota) {
+    class Emmagatzematge {
+        static desar(id, nom, curs, nota) {
             let magatzemObjsAlumnes = db.transaction("alumnes", "readwrite").objectStore("alumnes");
             let alumne = {
                 'id': parseInt(id), 'nom': nom, 'curs': curs, 'nota': parseInt(nota)
             };
             magatzemObjsAlumnes.add(alumne);
-        },
-        esborrarAlumne: function (id) {
+        }
+        static esborrarAlumne(id) {
             let magatzemObjsAlumnes = db.transaction("alumnes", "readwrite").objectStore("alumnes");
             magatzemObjsAlumnes.delete(parseInt(id));
         }
@@ -124,7 +124,7 @@ function main() {
     function afegirUsuari(id, nom, curs, nota) {
         let objectPos = store.getState().map((x) => { return x.id; }).indexOf(parseInt(id));
         if (objectPos === -1) {
-            emmagatzematge.desar(parseInt(id), nom, curs, parseInt(nota));
+            Emmagatzematge.desar(parseInt(id), nom, curs, parseInt(nota));
             store.dispatch({
                 type: "ADD_USER", id: parseInt(id), nom: nom, curs: curs, nota: parseInt(nota)
             });
@@ -228,7 +228,7 @@ function main() {
             store.dispatch({
                 type: "DELETE_USER", id: parseInt(buttonClicked)
             });
-            emmagatzematge.esborrarAlumne(buttonClicked)
+            Emmagatzematge.esborrarAlumne(buttonClicked)
         }
     });
     inputFiltrar.addEventListener('keydown', () => {
@@ -238,9 +238,7 @@ function main() {
     })
     selectMitjana.addEventListener('change', (event) => {
         mitjana = event.target.value;
-        store.dispatch({
-            type: "FILTER_NOTA", filter: mitjana,
-        })
+
     });
     resetFilter.addEventListener('click', () => {
         selectMitjana.getElementsByTagName('option')[0].selected = 'selected'
