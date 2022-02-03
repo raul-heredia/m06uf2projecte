@@ -30,20 +30,8 @@ function main() {
                 alert(`Error, no existeix cap alumne amb el identificador ${action.id}.`);
             }
         }
-        if (action.type === 'FILTER_TEXT') {
-            const filtre = state.filter(alumne => alumne.nom.startsWith(action.filtrar));
-            return filtre;
-        }
-        if (action.type === 'FILTER_NOTA') {
-            if (action.filter === 'aprovats') {
-                let filterAprovats = state.filter(alumne => alumne.nota >= 5);
-                return filterAprovats;
-            } else if (action.filter === 'suspesos') {
-                let filterSuspesos = state.filter(alumne => alumne.nota < 5);
-                return filterSuspesos;
-            } else if (action.filter === 'tots') {
-                return state;
-            };
+        if (action.type === 'DELETE_USER') {
+            return state.sort((a, b) => { return a.id - b.id });
         }
         return state.sort((a, b) => { return a.id - b.id });
     };
@@ -167,6 +155,29 @@ function main() {
             esborrar.setAttribute('id', user.id);
         })
     }
+    function generaTaulaFiltre(arrfilter) {
+        netejaCamps()
+        esborraTaula()
+        arrfilter.forEach(user => {
+            let fila = taula.insertRow(-1);
+            fila.insertCell(0).innerHTML = user.id;
+            fila.insertCell(1).innerHTML = user.nom;
+            fila.insertCell(2).innerHTML = user.curs;
+            let nota = fila.insertCell(3);
+            if (user.nota < 5) {
+                nota.className = 'suspes';
+            } else if (user.nota == 5) {
+                nota.className = 'suficient';
+            } else if (user.nota > 5) {
+                nota.className = 'aprovat';
+            }
+            nota.innerHTML = user.nota;
+            let esborrar = fila.insertCell(4);
+            esborrar.innerHTML = '<i class="bi bi-x-lg"></i>';
+            esborrar.className = "esborrar";
+            esborrar.setAttribute('id', user.id);
+        })
+    }
 
     function dropJSON(targetEl, callback) {
         // disable default drag & drop functionality
@@ -238,9 +249,21 @@ function main() {
     })
     selectMitjana.addEventListener('change', (event) => {
         mitjana = event.target.value;
-
+        let filtre;
+        switch (mitjana) {
+            case "aprovats":
+                filtre = store.getState().filter((a) => a.nota >= 5)
+                break;
+            case "suspesos":
+                filtre = store.getState().filter((a) => a.nota < 5)
+                break;
+        }
+        generaTaulaFiltre(filtre)
     });
     resetFilter.addEventListener('click', () => {
         selectMitjana.getElementsByTagName('option')[0].selected = 'selected'
+        store.dispatch({
+            type: "RESET_FILTER"
+        });
     });
 }
