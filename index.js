@@ -29,6 +29,8 @@ function main() {
             let objectPos = state.map((x) => { return x.id; }).indexOf(action.id); // Busquem l'usuari a l'array d'estat
             if (objectPos !== -1) { // si existeix
                 state.splice(objectPos, 1); // fem un splice per a esborrar-lo i que no deixi una posició buida a l'array
+                Emmagatzematge.esborrarAlumne(parseInt(action.id)); // Esborrem l'usuari per ID
+                WebStorageEmmagatzematge.esborrarAlumne(parseInt(action.id)); // Esborrem l'usuari per ID
             } else { // Si no existeix donem un error
                 alert(`Error, no existeix cap alumne amb el identificador ${action.id}.`);
             }
@@ -80,7 +82,6 @@ function main() {
             magatzemObjsAlumnes.delete(parseInt(id));
         }
         static modificarAlumne(id, nom, curs, nota) {
-
             let magatzemObjsAlumnes = db.transaction("alumnes", "readwrite").objectStore("alumnes");
             let alumne = {
                 'id': parseInt(id), 'nom': nom, 'curs': curs, 'nota': parseInt(nota)
@@ -276,6 +277,7 @@ function main() {
             store.dispatch({
                 type: "DELETE_USER", id: parseInt(buttonClicked) // Enviem una accio amb dispatch de tipus DELETE_USER
             });
+
         }
     });
     inputFiltrar.addEventListener('keyup', () => { // cada vegada que aixequem una tecla
