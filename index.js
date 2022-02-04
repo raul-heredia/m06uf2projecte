@@ -19,6 +19,8 @@ function main() {
                 if (!isNaN(action.nota)) { // Si el camp nota es un número el canviem, si no es un número no canviarà.
                     state[objectPos].nota = action.nota; // canviem la nota que està guardada en la posició ObjectPos de l'estat
                 }
+                Emmagatzematge.modificarAlumne(parseInt(state[objectPos].id), state[objectPos].nom, state[objectPos].curs, state[objectPos].nota); // Per modificar agafem tots els camps després de modificar-los per a poder actualitzar tots els registres independentment de si s'han modificat o no. 
+                WebStorageEmmagatzematge.desar(parseInt(state[objectPos].id), state[objectPos].nom); // En web storage no fa falta un metode especial per modificar, simplement el tornem a afegir;
             } else { // Si l'objecte no existeix enviem un alert
                 alert(`Error, no existeix cap alumne amb el identificador ${action.id}.`);
             }
@@ -76,6 +78,14 @@ function main() {
         static esborrarAlumne(id) {
             let magatzemObjsAlumnes = db.transaction("alumnes", "readwrite").objectStore("alumnes");
             magatzemObjsAlumnes.delete(parseInt(id));
+        }
+        static modificarAlumne(id, nom, curs, nota) {
+
+            let magatzemObjsAlumnes = db.transaction("alumnes", "readwrite").objectStore("alumnes");
+            let alumne = {
+                'id': parseInt(id), 'nom': nom, 'curs': curs, 'nota': parseInt(nota)
+            };
+            magatzemObjsAlumnes.put(alumne);
         }
     }
 
@@ -266,8 +276,6 @@ function main() {
             store.dispatch({
                 type: "DELETE_USER", id: parseInt(buttonClicked) // Enviem una accio amb dispatch de tipus DELETE_USER
             });
-            Emmagatzematge.esborrarAlumne(buttonClicked) // Esborrem l'usuari de indexeddb
-            WebStorageEmmagatzematge.esborrarAlumne(parseInt(buttonClicked)); // Esborrem la entrada de WebStorage
         }
     });
     inputFiltrar.addEventListener('keyup', () => { // cada vegada que aixequem una tecla
